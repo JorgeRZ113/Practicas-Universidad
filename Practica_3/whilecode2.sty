@@ -1,0 +1,119 @@
+% (c) Manuel López Reviriego
+%
+%% This program can be redistributed and/or modified under the terms
+%% of the LaTeX Project Public License 
+% 
+\ProvidesPackage{whilecode2}
+  [04/01/2018 v1.0 - Package for writing programs in WHILE]
+
+\RequirePackage{listings}
+\RequirePackage{suffix}
+\RequirePackage[onelanguage, linesnumbered, noline, resetcount]{algorithm2e}
+
+\LinesNotNumbered
+
+\DeclareOption{linesnumbered}{
+  \LinesNumbered
+}
+\ProcessOptions\relax
+
+% 1. Variables
+\newcommand{\Var}[1]{#1}
+
+% 2. Assignments
+\newcommand{\Zero}[1]{#1 \Assig 0\;}						% Assign 0 to #1
+\WithSuffix\newcommand\Zero*[1]{#1 \Assig 0}				% Assign 0 to #1 (no line break)
+
+\newcommand{\Copy}[2]{#1 \Assig #2\;}						% Assign #2 to #1
+\WithSuffix\newcommand\Copy*[2]{#1 \Assig #2}				% Assign #2 to #1 (no line break)
+
+\newcommand{\Incr}[2]{#1 \Assig #1 $ + \ $#2\;}				% Add #2 to #1
+\WithSuffix\newcommand\Incr*[2]{#1 \Assig #1 $ + \ $#2}	% Add #2 to #1 (no line break)
+
+\newcommand{\Decr}[2]{#1 \Assig #1 $ - \ $#2\;}				% Subtract #2 from #1
+\WithSuffix\newcommand\Decr*[2]{#1 \Assig #1 $ - \ $#2}	% Subtract #2 from #1 (no line break)
+
+% 3. Control structures (AW -> Augmented while)
+\SetKwProg{While}{while}{ do}{od}
+\SetKwProg{DoTimesAW}{do}{ times}{od}			
+
+\newcommand{\IfAW}[2]{\If{#1}{#2}}
+\newcommand{\IfElseAW}[3]{\uIf{#1}{#2}\Else{#3}}
+
+% 4. Commentaries and blank lines
+\newcommand{\WhileBlankLine}{\DontPrintSemicolon\;\PrintSemicolon}
+\SetKwComment{CommentInlineKW}{(*}{*)\WhileBlankLine}
+\newcommand{\CommentInline}[1]{\CommentInlineKW*[f]{#1}}
+\SetKwComment{HeaderComment}{}{}
+\newcommand{\Comment}[1]{\texttt{(*#1*)}\\}
+
+% 5. While code environment
+\newenvironment{whilecode}
+    {\begin{algorithm}
+    }
+    { 
+    \end{algorithm}
+    }
+    
+% 6. While program command
+\newcommand{\whileprogram}[4]{\begin{whilecode}[h]
+\Indm
+\HeaderComment{\textnormal{#1 = $(#2$, #4)}}
+\HeaderComment{\ }
+\HeaderComment{\textnormal{#4:}}
+\Indp
+#3
+\end{whilecode}}
+
+\WithSuffix\newcommand\whileprogram*[4]{{\LinesNumberedHidden\begin{whilecode}[h]
+\Indm
+\HeaderComment{\textnormal{#1 = $(#2$, #4)}}
+\HeaderComment{\ }
+\HeaderComment{\textnormal{#4:}}
+\Indp
+#3
+\end{whilecode}}}
+
+% 7. Input, Output
+\SetKwInput{Input}{Input}
+\SetKwInput{Return}{Output}
+
+% 8. Others
+\newcommand{\Assig}{$ := \ $}
+\newcommand{\SetCodeStyle}{\RestyleAlgo}	% plain (default option), ruled, tworuled, boxed
+
+% 9. DEPRECATED COMMANDS
+\newcommand{\Asig}{\Assig}
+\newcommand{\DefaultVar}[1]{$X_#1$}
+\newcommand{\Inc}[1]{#1 $ + \ 1$}
+\newcommand{\Dec}[1]{#1 $ - \ 1$}
+\SetKwIF{If}{ElseIf}{Else}{if}{then}{else if}{else}{fi}
+\SetKwProg{WhileSC}{while}{ do}{od\;}
+\SetKwProg{DoTimes}{do}{ times}{od}
+\SetKwProg{DoTimesSC}{do}{ times}{od\;}
+
+\PackageWarning{\Asig}{'\Asig' is deprecated. You should use '\Assig'}
+
+\endinput
+
+% CHANGELOG:
+%
+% 04-01-2018: Creación del package. Se modifica el comando \Return, que muestra ahora "Output" en lugar de "Result"
+%
+% 10-01-2018:
+%	-Creación del comando whileprogram[5]: \whileprogram{nombre_codigo}{n}{p}{etiqueta_codigo}
+%	-\IfAW{condicion}{cuerpo} en sustitución de \If
+%	-\IfElseAW{condicion}{cuerpo_if}{cuerpo_else} sustituye a \uIf{...}\Else{...}
+%	-\DoTimesAW sustituye a \DoTimes
+%	-\Assig en sustitución de \Asig
+%	-\Zero, \Copy, \Incr, \Decr
+%	-Simplificación de \CommentInline: \CommentInline*[r] -> \CommentInline
+%	-\HeaderComment
+%	-Comandos que pasar a estar obsoletos, aunque se mantienen para mantener la compatibilidad con versiones anteriores: \Asig, \DefaultVar, \Inc, \Dec, \uIf\Else, \WhileSC, \DoTimes, \DoTimesSC
+%	-\SetCodeStyle{style}, donde style puede ser plain (por defecto, sin marcos alrededor del código), ruled (el estilo que tienen todos los códigos de los apuntes, actualmente), tworuled (1 línea encima y otra debajo del código) y boxed (el código aparece dentro de un cuadrado).
+%
+% 16-01-2018:
+%	-Se añade el entorno whileprogram*[5] que es exactamente igual a whileprogram[5], pero no numera las líneas del código
+%	-Se añade la opción linesnumbered al package. Por defecto, no se muestran las líneas enumeradas. Para mostrarlas, habría que escribir \usepackage[\linesnumbered]{whilecode} 
+% 21-12-2020:
+%   -Se modifica definición de las cabeceras de los programas WHILE quitando la p.
