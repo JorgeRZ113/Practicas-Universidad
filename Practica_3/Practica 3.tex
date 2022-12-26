@@ -1,0 +1,57 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\graphicspath{{/home/jorge/Imágenes/}}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{nccmath} 
+\usepackage{verbatim}
+\theoremstyle{definition}
+\newtheorem{definition}{Definición}[section]
+\newtheorem{example}{Ejemplo}[section]
+%% cardinality
+\newcommand{\card}[1]{\ensuremath{\lvert #1 \rvert}}
+
+\title{Teoría de Autómatas y Lenguajes Formales\\[.4\baselineskip]Práctica 3: Turing Machine,
+recursive functions and
+WHILE language}
+
+
+\author{Jorge Ramírez Zotano}
+
+\begin{document}
+
+\maketitle
+                                                                                                                                
+\section{Maquina de turing de "add" }
+
+\includegraphics{Maquina} 
+
+\section{Ecuacion recursiva}
+\subsection{Codigo}
+\begin{center}
+$addition = <<\pi^1_1|\sigma(\pi^3_3)>|\sigma(\pi^4_4)> $
+\end{center}
+
+\subsection{Ejercucuion}
+\includegraphics{Suma}
+
+\section{Programa WHILE de Suma de tres valores}
+\subsection{Codigo}
+Q: (3,3,s)\\
+s:\\
+while X3 != 0 do\\
+X2 := X2 + 1;\\
+X3 := X3 - 1\\
+od;\\
+while X2 != 0 do\\
+X1 := X1 + 1;\\
+X2 := X2 - 1\\
+od
+
+
+\end{document}
